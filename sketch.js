@@ -1,7 +1,11 @@
-let currentTime;
+let currentSecond;
+let currentMinute;
+let currentHour;
 let sora;
 let donald;
 let goofy;
+let r,g,b;
+
 
 function setup(){
   createCanvas(800,600);
@@ -12,26 +16,41 @@ function setup(){
 }
 
 function draw(){
+  currentMinute = minute();
+  currentSecond = millis() / 500;
   background(0);
-  drawSky();
   drawMoon();
-  fill(255,254,196);
-  ellipse(width - mouseX,height - mouseY,200,200);
+  if(currentMinute % 4 == 0){
+    fill(200);
+    ellipse(mouseX,mouseY,200,200);
+    fill(20);
+    rect(0,500,800,100);
+    drawSky(currentSecond);
+  } else{
+    drawSky(3);
+    fill(255,254,196);
+    ellipse(width - mouseX,height - mouseY,200,200);
+    noStroke();
+    find(sora);
+    find(goofy);
+    donald.move();
+    find(donald);
+    fill(20);
+    rect(0,500,800,100);
+    drawBox(30,450);
+    drawBox(110,450);
+    drawBox(80,380);
+  }
   noStroke();
-  fill(20);
-  rect(0,500,800,100);
-  find(sora);
-  find(goofy);
-  donald.move();
-  find(donald);
   drawLamp();
-  drawBox(30,450);
-  drawBox(110,450);
-  drawBox(80,380);
+
 }
 
 function mousePressed(){
   console.log(mouseX,mouseY);
+  if(mouseX<75 && mouseY<75){
+    setup();
+  }
 }
 
 function drawLamp(){
@@ -47,24 +66,31 @@ function drawLamp(){
   quad(552,165,573,165,583,125,542,125);
   rect(542,123,40,2);
   triangle(554,124,571,124,562,110);
+  if(currentMinute % 4 == 0){
+    fill(0);
+  }else{
   fill(255,254,147);
+  }
   quad(555,162,570,162,579,128,546,128);
 }
 
-function drawSky(){
+function drawSky(size){
   noStroke();
-  fill(255);
-  ellipse(178,68,2,2);
-  ellipse(244,186,2,2);
-  ellipse(408,15,2,2);
-  ellipse(436,131,2,2);
-  ellipse(525,202,2,2);
-  ellipse(278,103,2,2);
-  ellipse(562,48,2,2);
-  ellipse(650,176,2,2);
-  ellipse(680,66,2,2);
-  ellipse(65,224,2,2);
-  ellipse(32,104,2,2);
+  r=int(random(75,255));
+  g=int(random(75,255));
+  b=int(random(75,255));
+  fill(r,g,b);
+  ellipse(178,68,size,size);
+  ellipse(244,186,size,size);
+  ellipse(408,15,size,size);
+  ellipse(436,131,size,size);
+  ellipse(525,202,size,size);
+  ellipse(278,103,size,size);
+  ellipse(562,48,size,size);
+  ellipse(650,176,size,size);
+  ellipse(680,66,size,size);
+  ellipse(65,224,size,size);
+  ellipse(32,104,size,size);
 }
 
 function drawBox(x,y){
@@ -79,15 +105,18 @@ function drawBox(x,y){
   rect(x+55,y,15,70);
 }
 function drawMoon(){
-  currentTime = hour();
-  if (currentTime>=5 && currentTime<12){
+  currentHour = hour();
+  if (currentHour>=6 && currentHour<12){
     fill(5);
-  } else if (currentTime>=12 && currentTime<18){
+  } else if (currentHour>=12 && currentHour<18){
     fill(40);
   } else{
     fill(200);
   }
 ellipse(54,32,50,50);
+fill(0);
+ellipse(63,26,5,8);
+ellipse(68,40,10,20);
 }
 
 function find(creature){
@@ -116,7 +145,7 @@ class Creature {
  }
  move(){
   if(this.x<=width){
-    this.x += 5;
+    this.x += (currentMinute % 4);
   } else{
     this.x = 0
   }

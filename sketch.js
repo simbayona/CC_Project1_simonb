@@ -22,10 +22,10 @@ function draw(){
   drawMoon();
   if(currentMinute % 4 == 0){ // In order to get the feeling that I wanted I wanted to overwhelm the users with info and colors this is "Chaos Mode"
     fill(200); // I changed the color of the spotlight to be just gray
-    ellipse(mouseX,mouseY,200,200); // changedd the movement back to what one would expect from mouse controls
-    drawSky(currentSecond); // this one is to make the stars in the background grow
+    ellipse(mouseX,mouseY,200,200); // changed the movement back to what one would expect from mouse controls
+    drawSky(currentSecond); // this one is to make the stars in the background grow and to make the spotlight not go infront of the stars
     fill(20);
-    rect(0,500,800,100); // this is just redrawing the floor area so that the light would still be behind
+    rect(0,500,800,100); // this is just redrawing the floor area so that the spotlight would still be behind
   } else{ // this is the normal state of the sketch
     drawSky(3);
     fill(255,254,196);
@@ -149,7 +149,7 @@ class Creature { // this is my creature class
   if(this.x<=width){
     this.x += (currentMinute % 4); // I wanted to have something change besides Chaos Mode so I made one of the objects speed up depending on the minute
   } else{ // the modulo just moves from 0 - 3 but because the object isn't visible for currentMinute % 4 == 0 it really speeds up
-         // from a speed of 1 - 3 
+         // from a speed of 1 - 3
     this.x = 0
   }
  }

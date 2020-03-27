@@ -4,6 +4,9 @@ let currentHour;
 let boxes;
 let lamp;
 let runner;
+let skydiver;
+let diver;
+let tavernkeep;
 let r,g,b;
 
 

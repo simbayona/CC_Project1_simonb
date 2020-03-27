@@ -1,18 +1,21 @@
 let currentSecond;
 let currentMinute;
 let currentHour;
-let sora;
-let donald;
-let goofy;
+let boxes;
+let lamp;
+let runner;
 let r,g,b;
 
 
 function setup(){
-  createCanvas(800,600);
+  createCanvas(1200,600);
   background(0);
-  sora = new Creature(150,430,25); // i created each of the creatures as the little squares with their own position and possibly their own
-  goofy = new Creature(560,275,25); // size even tough they are all the same
-  donald = new Creature(0,475,25);
+  boxes = new Hooligan(150,425,30); // i created each of the creatures as the little squares with their own position and possibly their own
+  lamp = new Hooligan(560,275,25); // size even tough they are all the same
+  runner = new Hooligan(0,460,40);
+  skydiver = new Hooligan(750,0,25); // new hooligans that fall, this one falls slow
+  diver = new Hooligan(1100,50,25); // this one falls fast
+  tavernkeep = new Hooligan(935,185,10,10);
 }
 
 function draw(){
@@ -25,24 +28,30 @@ function draw(){
     ellipse(mouseX,mouseY,200,200); // changed the movement back to what one would expect from mouse controls
     drawSky(currentSecond); // this one is to make the stars in the background grow and to make the spotlight not go infront of the stars
     fill(20);
-    rect(0,500,800,100); // this is just redrawing the floor area so that the spotlight would still be behind
+    rect(0,500,width,100); // this is just redrawing the floor area so that the spotlight would still be behind
   } else{ // this is the normal state of the sketch
     drawSky(3);
     fill(255,254,196);
     ellipse(width - mouseX,height - mouseY,200,200); // i wanted to make the "contols" weird so that they would take a bit to get used time to
     noStroke();
-    find(sora); // the find function shows the creature objecs only when the spotlight is close if not on them
-    find(goofy);
-    donald.move(); // the move method moves only one of the objects so that the others would stay consistent
-    find(donald);
+    find(boxes); // the find function shows the creature objecs only when the spotlight is close if not on them
+    find(lamp);
+    runner.run(); // the move method moves only one of the objects so that the others would stay consistent
+    find(runner);
+    skydiver.fall(2);
+    find(skydiver);
+    diver.fall(10);
+    find(diver);
+    find(tavernkeep);
     fill(20);
-    rect(0,500,800,100); // floor
+    rect(0,500,width,100); // floor
     drawBox(30,450); // three crate looking boxes at the left that dissapear in "Chaos Mode"
     drawBox(110,450);
     drawBox(80,380);
   }
   noStroke();
   drawLamp(); // drawing the lamp to the right
+  drawSign(); // drawing the sign with its post
 
 }
 
@@ -87,10 +96,18 @@ function drawSky(size){ // I drew a bunch of small stars in the background at fi
   ellipse(525,202,size,size);
   ellipse(278,103,size,size);
   ellipse(562,48,size,size);
-  ellipse(650,176,size,size);// btw the first is like 20 times better than the second
+  ellipse(650,176,size,size);// btw the first movie is like 20 times better than the second
   ellipse(680,66,size,size);
   ellipse(65,224,size,size);
   ellipse(32,104,size,size);
+  ellipse(724,145,size,size);
+  ellipse(824,74,size,size);
+  ellipse(893,220,size,size);
+  ellipse(1000,93,size,size);
+  ellipse(1054,210,size,size);
+  ellipse(1131,94,size,size);
+  ellipse(941,66,size,size);
+  ellipse(792,174,size,size);
 }
 
 function drawBox(x,y){ // this functions is pretty simply just drawing a crate based on one x,y pairing
@@ -103,6 +120,26 @@ function drawBox(x,y){ // this functions is pretty simply just drawing a crate b
   rect(x,y+55,70,15);
   rect(x,y,15,70);
   rect(x+55,y,15,70);
+}
+function drawSign(){
+  noStroke();
+  fill(100);
+  ellipse (845,205,5,15); // these little ellipses are there to represent some chaines for the sign to hang from
+  ellipse (845,215,5,15);
+  ellipse (905,205,5,15);
+  ellipse (905,215,5,15);
+  fill (87,48,18);
+  quad (930,200,945,215,945,230,915,200); // these three represent the diagonal
+  rect (945,170,10,380); // vertical
+  rect (830,195,120,10); // and horizontal pieces of the post that holds up the sign
+  if(currentMinute % 4 != 0){
+    rect (835,215,80,50); // i wanted the actuall sign to dissapear in chaos mode
+  }
+  fill (64,35,13);
+  ellipse (952,278,3,5); // i thought it would be cute to add little dark spots like in actuall wood
+  ellipse (948,373,3,5);
+
+
 }
 function drawMoon(){ // This will not be noticable but I was bored so the moon changes its shade depening on the time of day
   currentHour = hour();
@@ -131,7 +168,7 @@ function find(creature){
 }// here is why I made the class constructor take x,y, and size as paremeters, this function takes the name of the object and passes
 // it through to compare the three points based on the top left corner at this.x and this.y and the other two by adding this.size to one and then the other
 
-class Creature { // this is my creature class
+class Hooligan { // this is my creature class
  constructor(x,y,size){ // the contructor makes a couple a varialbes to make the find function possible
  this.r = int(random(0,255));
  this.g = int(random(0,255));
@@ -145,12 +182,19 @@ class Creature { // this is my creature class
   fill(this.r, this.g, this.b);
   rect(this.x,this.y,this.size,this.size);
  }
- move(){
+ run(){
   if(this.x<=width){
     this.x += (currentMinute % 4); // I wanted to have something change besides Chaos Mode so I made one of the objects speed up depending on the minute
   } else{ // the modulo just moves from 0 - 3 but because the object isn't visible for currentMinute % 4 == 0 it really speeds up
          // from a speed of 1 - 3
     this.x = 0
+  }
+ }
+ fall(speed){ // this function works similarly to the run function but lets me choose how fast the hooligan falls
+  if(this.y<=height){
+    this.y += speed;
+  } else{
+    this.y=0
   }
  }
 }
